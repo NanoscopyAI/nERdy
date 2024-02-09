@@ -8,26 +8,28 @@ import imageio
 from PIL import Image
 
 
-from model import NerdyNet
+from model import D4nERdy
 from postprocessing import PostProcessing
 
 
 home = os.path.expanduser('~')
 
-sted_data_prefix = f'{home}/MIAL/data/sted-data/vess_enh_unet'
+sted_data_prefix = f'/path/to/sted-data'
 
-groups = ['climp', 'control', 'rtn']
+groups = {'climp':9, 'control':14, 'rtn':12}
 
 in_channels = 1
 out_channels = 1
 
 
-model = NerdyNet(in_channels, out_channels)
+model = D4nERdy(in_channels, out_channels)
 process = PostProcessing()
-model.load_state_dict(torch.load('/localhome/asa420/unet_oct17.pth'))
+model.load_state_dict(torch.load('path/to/your/model.pth'))
 
-def get_prob_map():
-    imgpath = f'{sted_data_prefix}/{group}/images/sted_{group}{i}_er_mean.png'
+def get_prob_map(group, frame):
+    prob_map = {}
+    
+    imgpath = f'{sted_data_prefix}/{group}/images/sted_{group}{frame}_er_mean.png'
 
     image = Image.open(imgpath)
     transform = transforms.Compose([
@@ -54,3 +56,12 @@ def get_prob_map():
     prob_map = process.postprocessing(norm)
 
     return prob_map
+
+
+def prob_map_runner():
+    prob_map_data = {}
+    for group in groups:
+        for frame in range(1, groups[group]+1):
+            prob_map = get_prob_map(group, frame)
+            prob_map_data[f'{group}{frame}'] = prob_map
+    return prob_map_data

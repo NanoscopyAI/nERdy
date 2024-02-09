@@ -4,7 +4,7 @@ import torch.optim as optim
 from torch.utils.data import DataLoader, random_split
 from torchvision import transforms
 
-from model import NerdyNet
+from model import D4nERdy
 from dataloader import ERDataset
 
 import numpy as np
@@ -15,7 +15,7 @@ torch.manual_seed(34)
 
 in_channels = 1
 out_channels = 1
-model = NerdyNet(in_channels, out_channels)
+model = D4nERdy(in_channels, out_channels)
 
 # Define your loss function and optimizer
 criterion = nn.BCEWithLogitsLoss()
@@ -29,7 +29,7 @@ transform = transforms.Compose([
 
 # Define path and dataset
 
-root_dir = '/localhome/asa420/MIAL/data/confocal-data/vess_enh_unet/'
+root_dir = '/path/to/your/dataset'
 
 dataset = ERDataset(root_dir, transform=transform)
 
