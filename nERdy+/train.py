@@ -4,8 +4,8 @@ import torch.optim as optim
 from torch.utils.data import DataLoader, random_split
 from torchvision import transforms
 
-from model import D4nERdy
-from dataloader import ERDataset
+from .model import D4nERdy
+from .dataloader import ERDataset
 
 import numpy as np
 

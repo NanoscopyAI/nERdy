@@ -8,28 +8,28 @@ import imageio
 from PIL import Image
 
 
-from model import D4nERdy
-from postprocessing import PostProcessing
+from .model import D4nERdy
+from .postprocessing import PostProcessing
 
 
 home = os.path.expanduser('~')
 
-sted_data_prefix = f'/path/to/sted-data'
+sted_data_prefix = '/path/to/sted-data'
 
+# Number of samples per group
 groups = {'climp':9, 'control':14, 'rtn':12}
 
 in_channels = 1
 out_channels = 1
 
-
 model = D4nERdy(in_channels, out_channels)
 process = PostProcessing()
 model.load_state_dict(torch.load('path/to/your/model.pth'))
 
-def get_prob_map(group, frame):
-    prob_map = {}
-    
-    imgpath = f'{sted_data_prefix}/{group}/images/sted_{group}{frame}_er_mean.png'
+def get_prob_map():
+
+    # Adjust path to your image
+    imgpath = 'climp12_er_mean.png'
 
     image = Image.open(imgpath)
     transform = transforms.Compose([
@@ -37,7 +37,9 @@ def get_prob_map(group, frame):
     ])
 
     image = transform(image)
-    image = image.unsqueeze(0)  # Add batch dimension
+
+    # Add batch dimension
+    image = image.unsqueeze(0)
 
     # Forward pass through the model
     model.eval()
@@ -57,7 +59,7 @@ def get_prob_map(group, frame):
 
     return prob_map
 
-
+# get the probability map per input in each group
 def prob_map_runner():
     prob_map_data = {}
     for group in groups:
