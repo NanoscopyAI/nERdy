@@ -16,15 +16,10 @@ Ip = Ip - min(Ip(:));
 Ip = Ip ./ max(Ip(:));
 
 % compute enhancement for two different tau values
-%V1 = vesselness2D(Ip, 0.5:0.1:2.5, [1;1], 0.6, true);
 V2 = vesselness2D(Ip, 0.5:0.5:2.5, [3;3], 0.1, true);
-%V2 = vesselness2D(Ip, 0.5:0.5:2.5, [2;2], 0.6, true); - default
-
-% imwrite(V1, output_filename, 'png');
 
 op = imbinarize(V2);
 imwrite(op, output_filename, 'png');
-%imshow(op)
 
 
 function [RootName,Path,Ext] = ExtractRootName(Name)
