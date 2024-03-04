@@ -1,23 +1,34 @@
-import numpy as np
-from skimage.measure import label, regionprops
+"""junction analysis modules"""
+
+import os
 import itertools
+import numpy as np
+from skimage.measure import label
 import sknw
 import imageio
 from plantcv import plantcv as pcv
-import copy
-import matplotlib.pyplot as plt
-import skimage
-import os
+
 
 confocal_data_path = '/path/to/confocal/data'
 sted_data_path = '/path/to/sted/data'
 
 class JunctionAnalysisModules:
+    """
+    Junction analysis modules.
+
+    Args:
+        modality (str): The modality of the junctions.
+    
+    Attributes:
+        data_path (str): The path to the data directory.
+
+    """
 
     def __init__(self, modality):
         self.data_path = sted_data_path if modality == 'sted' else confocal_data_path
 
-    def get_skeleton(self, img_path):
+    @staticmethod
+    def get_skeleton(img_path):
         """
         Get the skeleton of an image.
 
@@ -31,7 +42,8 @@ class JunctionAnalysisModules:
         img = imageio.imread(img_path)
         return pcv.morphology.skeletonize(mask=img)
 
-    def skel_to_graph(self, skel_img_path):
+    @staticmethod
+    def skel_to_graph(skel_img_path):
         """
         Converts a skeleton image to a graph representation.
 
@@ -65,86 +77,84 @@ class JunctionAnalysisModules:
         return [node_coords[i] for i, val in enumerate(degree_list) if val[1] > 2]
 
     def get_all_junc(self, group, num_series):
-            """
-            Get reference junctions based on mean projection frame and per frame junctions for each series, all groups.
+        """
+        Get reference junctions based on mean projection frame and per frame junctions for each series, all groups.
 
-            Args:
-                group (str): The group name.
-                num_series (int): The series number.
+        Args:
+            group (str): The group name.
+            num_series (int): The series number.
 
-            Returns:
-                tuple: A tuple containing the reference junctions, per frame junctions, and reference graph.
-            """
-            group_pref = {'ATL':'A', 'Climp':'C', 'Control':'Ct', 'RTN':'R'}
+        Returns:
+            tuple: A tuple containing the reference junctions, per frame junctions, and reference graph.
+        """
+        group_pref = {'ATL':'A', 'Climp':'C', 'Control':'Ct', 'RTN':'R'}
 
-            if self.data_path == sted_data_path:
-                mean_skel_path = f'{self.data_path}/{group.lower()}/gt_skel/sted_{group.lower()}{num_series}_proc_skel.png'
-            else:
-                mean_skel_path = f'{self.data_path}/{group.lower()}/gt_skel/conf_{group.lower()}{num_series}_proc_skel.png'
+        if self.data_path == sted_data_path:
+            mean_skel_path = f'{self.data_path}/{group.lower()}/gt_skel/sted_{group.lower()}{num_series}_proc_skel.png'
+        else:
+            mean_skel_path = f'{self.data_path}/{group.lower()}/gt_skel/conf_{group.lower()}{num_series}_proc_skel.png'
 
-            if os.path.exists(mean_skel_path):
-                ref_graph = self.skel_to_graph(mean_skel_path)
+        if os.path.exists(mean_skel_path):
+            ref_graph = self.skel_to_graph(mean_skel_path)
 
-                ref_junctions = self.get_junctions(mean_skel_path)
-                ref_junctions = [[each[0], each[1]] for each in ref_junctions]
+            ref_junctions = self.get_junctions(mean_skel_path)
+            ref_junctions = [[each[0], each[1]] for each in ref_junctions]
 
-                per_frame_junctions = []
-                
-                for frame in range(100):
-                    skeleton_path = f'{self.data_path}/vess_enh_unet/{group.lower()}/skel/{group_pref[group]}{num_series}_decon_t0{frame:02d}_ch00_skel.png'
+            per_frame_junctions = []
 
-                    junctions = self.get_junctions(skeleton_path)
+            for frame in range(100):
+                skeleton_path = f'{self.data_path}/{group.lower()}/skel/{group_pref[group]}{num_series}_decon_t0{frame:02d}_ch00_skel.png'
 
-                    junc_array = [[junc[0], junc[1]] for junc in junctions]
-                    per_frame_junctions.extend(junc_array)
-            
-            else:
-                ref_junctions = []
-                per_frame_junctions = []
-                ref_graph = []
+                junctions = self.get_junctions(skeleton_path)
 
-            return ref_junctions, per_frame_junctions, ref_graph
-    
+                junc_array = [[junc[0], junc[1]] for junc in junctions]
+                per_frame_junctions.extend(junc_array)
+        else:
+            ref_junctions = []
+            per_frame_junctions = []
+            ref_graph = []
+
+        return ref_junctions, per_frame_junctions, ref_graph
 
     def label_junctions(self, group, series_num):
-            """
-            Labels the junctions in the given group and series number.
+        """
+        Labels the junctions in the given group and series number.
 
-            Args:
-                group (str): The group identifier.
-                series_num (int): The series number.
+        Args:
+            group (str): The group identifier.
+            series_num (int): The series number.
 
-            Returns:
-                tuple: A tuple containing the following elements:
-                    - ref_junctions (list): The reference junctions.
-                    - per_frame_junctions (list): The per-frame junctions.
-                    - labelled_img (ndarray): The labelled image of the spread of junctions.
-                    - ref_graph (Graph): The reference graph.
-            """
-            
-            ref_junctions, per_frame_junctions, ref_graph = self.get_all_junc(group, series_num)
+        Returns:
+            tuple: A tuple containing the following elements:
+                - ref_junctions (list): The reference junctions.
+                - per_frame_junctions (list): The per-frame junctions.
+                - labelled_img (ndarray): The labelled image of the spread of junctions.
+                - ref_graph (Graph): The reference graph.
+        """
 
-            # Check if reference junctions exist
-            if not ref_junctions:
-                return [], [], [], []
+        ref_junctions, per_frame_junctions, ref_graph = self.get_all_junc(group, series_num)
 
-            ref_junctions = np.array(ref_junctions)
-            per_frame_junctions = np.array(per_frame_junctions)
+        # Check if reference junctions exist
+        if not ref_junctions:
+            return [], [], [], []
 
-            # Create an image to label the spread of junctions
-            junc_spread_img = np.zeros((128, 128))
+        ref_junctions = np.array(ref_junctions)
+        per_frame_junctions = np.array(per_frame_junctions)
 
-            # Set pixel values for per-frame junctions
-            for junction in per_frame_junctions:
-                junc_spread_img[junction[0], junction[1]] = 255.
+        # Create an image to label the spread of junctions
+        junc_spread_img = np.zeros((128, 128))
 
-            # Label connected components in the spread image
-            labelled_img = label(junc_spread_img, connectivity=2)
+        # Set pixel values for per-frame junctions
+        for junction in per_frame_junctions:
+            junc_spread_img[junction[0], junction[1]] = 255.
 
-            return ref_junctions, per_frame_junctions, labelled_img, ref_graph
+        # Label connected components in the spread image
+        labelled_img = label(junc_spread_img, connectivity=2)
 
+        return ref_junctions, per_frame_junctions, labelled_img, ref_graph
 
-    def get_ref_junc_per_CC_id(self, reference_junctions, connected_components):
+    @staticmethod
+    def get_ref_junc_per_CC_id(reference_junctions, connected_components):
         """
         Get reference junctions per connected component ID.
 
@@ -159,41 +169,43 @@ class JunctionAnalysisModules:
         label_ids = {}
 
         for junction in reference_junctions:
-            if connected_components[junction[0], junction[1]] != 0:
-                cc_id = connected_components[junction[0], junction[1]]
+            x, y = junction[0], junction[1]
+            if connected_components[x, y] != 0:
+                cc_id = connected_components[x, y]
                 if cc_id not in label_ids:
                     label_ids[cc_id] = []
-                label_ids[cc_id].append([junction[0], junction[1]])
+                label_ids[cc_id].append([x, y])
 
         return label_ids
 
-    def get_uncertain_junctions(self, labelled_img, per_frame_junctions, num_components, assigned_components):
-            """
-            Get the uncertain junctions for connected components without a reference junction.
+    @staticmethod
+    def get_uncertain_junctions(labelled_img, per_frame_junctions, num_components, assigned_components):
+        """
+        Get the uncertain junctions for connected components without a reference junction.
 
-            Args:
-                labelled_img (numpy.ndarray): The labelled image.
-                per_frame_junctions (list): List of junctions per frame.
-                num_components (list): List of all connected components.
-                assigned_components (list): List of connected components with a reference junction.
+        Args:
+            labelled_img (numpy.ndarray): The labelled image.
+            per_frame_junctions (list): List of junctions per frame.
+            num_components (list): List of all connected components.
+            assigned_components (list): List of connected components with a reference junction.
 
-            Returns:
-                dict: A dictionary containing the uncertain junctions per connected component.
-            """
-            
-            # list of CCs without a ref junction
-            unassigned_components = [x for x in num_components if x not in assigned_components]
+        Returns:
+            dict: A dictionary containing the uncertain junctions per connected component.
+        """
 
-            unassigned_cc_dict = {}
+        # list of CCs without a ref junction
+        unassigned_components = [x for x in num_components if x not in assigned_components]
 
-            # Get junctions per frame for CCs without ref junction
-            for each in per_frame_junctions:
-                cc_label = labelled_img[each[0], each[1]]
-                if cc_label != 0 and cc_label in unassigned_components:
-                    if cc_label not in unassigned_cc_dict.keys():
-                        unassigned_cc_dict[(labelled_img[each[0], each[1]])] = []
-                    unassigned_cc_dict[(labelled_img[each[0], each[1]])].append([each[0], each[1]])
-            return unassigned_cc_dict
+        unassigned_cc_dict = {}
+
+        # Get junctions per frame for CCs without ref junction
+        for each in per_frame_junctions:
+            cc_label = labelled_img[each[0], each[1]]
+            if cc_label != 0 and cc_label in unassigned_components:
+                if cc_label not in unassigned_cc_dict.keys():
+                    unassigned_cc_dict[(labelled_img[each[0], each[1]])] = []
+                unassigned_cc_dict[(labelled_img[each[0], each[1]])].append([each[0], each[1]])
+        return unassigned_cc_dict
 
     def separate_junc_cc(self, ref_junctions, labelled_img):
         """
@@ -210,7 +222,8 @@ class JunctionAnalysisModules:
 
         return label_ids
 
-    def get_junction_areas(self, label_ids):
+    @staticmethod
+    def get_junction_areas(label_ids):
         """
         Get the areas of isolated and fuzzy junctions.
 
