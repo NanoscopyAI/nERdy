@@ -1,30 +1,62 @@
+"""segmentation metrics plotter"""
+
 import pickle as pkl
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-# path = '/localhome/asa420/nERdy/analysis/pickle_files/segmentation_measures/'
+# path = 'pickle_files/segmentation_measures/'
 
 class SegmentationMetricsPlotter:
+    """
+    Plot the segmentation performance of the different methods.
+
+    Attributes:
+        modality (list): The modalities of the images.
+        metrics (list): The segmentation metrics.
+        methods (list): The segmentation methods.
+    """
+
     def __init__(self):
         self.modality = ['confocal', 'sted']
         self.metrics = ['dice', 'f1', 'iou']
         self.methods = ['AnalyzER', 'ERnet', 'ERnet-v2', 'nERdy', 'nERdy+']
 
     def load_data(self, modality, metric):
+        """
+        Load data from a pickle file based on the specified modality and metric.
+
+        Parameters:
+        modality (str): The modality of the data.
+        metric (str): The metric of the data.
+
+        Returns:
+        data: The loaded data from the pickle file.
+        """
         assert modality in self.modality, 'Invalid modality'
         assert metric in self.metrics, 'Invalid metric'
         return pkl.load(open(f'pickle_files/segmentation_measures/{modality}_{metric}.pkl', 'rb'))
 
     @staticmethod
     def get_series(data):
-            return [value for sublist in data for value in sublist]
+        """
+        Flatten a nested list into a single list.
+
+        Args:
+            data (list): A nested list containing the data.
+
+        Returns:
+            list: A flattened list.
+        """
+        return [value for sublist in data for value in sublist]
 
     def get_segmentation_perf(self):
+        """
+            Calculate and plot the segmentation performance metrics.
 
-        methods = ['AnalyzER', 'ERnet', 'ERnet-v2', 'nERdy', 'nERdy+']
-        # metrics = ['Dice score', 'F1 score', 'Jaccard Index']
-
+            Returns:
+                None
+        """
         conf_dice = self.load_data('confocal', 'dice')
         conf_f1 = self.load_data('confocal', 'f1')
         conf_jaccard = self.load_data('confocal', 'iou')
@@ -65,17 +97,17 @@ class SegmentationMetricsPlotter:
         for method in sted_jaccard:
             metric_names.append(['Jaccard Index']*len(method))
 
-        for num, method_name in enumerate(methods):
+        for num, method_name in enumerate(self.methods):
             method_names.append([f'{method_name}']*len(conf_dice[num]))
-        for num, method_name in enumerate(methods):
+        for num, method_name in enumerate(self.methods):
             method_names.append([f'{method_name}']*len(conf_f1[num]))
-        for num, method_name in enumerate(methods):
+        for num, method_name in enumerate(self.methods):
             method_names.append([f'{method_name}']*len(conf_jaccard[num]))    
-        for num, method_name in enumerate(methods):
+        for num, method_name in enumerate(self.methods):
             method_names.append([f'{method_name}']*len(sted_dice[num]))
-        for num, method_name in enumerate(methods):
+        for num, method_name in enumerate(self.methods):
             method_names.append([f'{method_name}']*len(sted_f1[num]))
-        for num, method_name in enumerate(methods):
+        for num, method_name in enumerate(self.methods):
             method_names.append([f'{method_name}']*len(sted_jaccard[num]))
 
         for modality in modality_data:
@@ -110,5 +142,5 @@ class SegmentationMetricsPlotter:
 
         # plt.close()
 
-segplotter = SegmentationMetricsPlotter()
-segplotter.get_segmentation_perf()
+# segplotter = SegmentationMetricsPlotter()
+# segplotter.get_segmentation_perf()
