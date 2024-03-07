@@ -1,10 +1,8 @@
 # nERdy
 
 ## Current structure
-nERdy: Traditional image processing based method
+nERdy: Image processing method
 
-nERdy+: Deep learning based method
+nERdy+: D4-equivariant segmentation method
 
-result_plots: scripts to generate all the results in the paper
-
-visualization: scripts to generate all the figures in the paper
+analysis: scripts for junction analysis pipeline and to generate all the results in the paper
