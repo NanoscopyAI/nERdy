@@ -1,0 +1,1 @@
+To avoid issues with installation of GrouPy PyTorch fork (https://github.com/adambielski/GrouPy/tree/master), the code in this directory is imported as given from https://github.com/adambielski/GrouPy/tree/master/groupy 

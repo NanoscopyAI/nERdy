@@ -1,10 +1,23 @@
 import os
 from PIL import Image
-from torch.utils.data import Dataset, DataLoader
-from torchvision import transforms
+from torch.utils.data import Dataset
 
 
 class ERDataset(Dataset):
+    """
+    A custom dataset class for handling ER images and masks.
+
+    Attributes:
+        root_dir (str): The root directory of the dataset.
+        transform (callable): A function/transform that takes in an image and mask and returns a transformed version.
+        classes (list): A list of class names in the dataset.
+
+    Methods:
+        __len__(): Returns the total number of samples in the dataset.
+        __getitem__(idx): Returns the image and mask at the given index.
+
+    """
+
     def __init__(self, root_dir, transform=None):
         self.root_dir = root_dir
         self.transform = transform

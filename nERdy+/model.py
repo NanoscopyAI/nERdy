@@ -1,13 +1,15 @@
-import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torchvision import transforms
 
-from groupy.gconv.pytorch_gconv.splitgconv2d import P4ConvZ2, P4ConvP4
 from groupy.gconv.pytorch_gconv import P4MConvZ2, P4MConvP4M
 from groupy.gconv.pytorch_gconv.pooling import plane_group_spatial_max_pooling
 
 class nERdy(nn.Module):
+    """
+    Non-equivariant neural network with similar layers as D4nERdy
+
+    """
+
     def __init__(self, in_channels, out_channels):
         super(nERdy, self).__init__()
 
@@ -44,6 +46,11 @@ class nERdy(nn.Module):
 
 
 class D4nERdy(nn.Module):
+    """
+    PyTorch module representing the nERdy+ model.
+
+    """
+
     def __init__(self, in_channels, out_channels):
         super(D4nERdy, self).__init__()
 

@@ -1,15 +1,11 @@
-import contextlib
-import itertools
 import torch
 from torchvision import transforms
 
 import os
-import imageio
 from PIL import Image
 
-
-from .model import D4nERdy
-from .postprocessing import PostProcessing
+from model import D4nERdy
+from postprocessing import postprocessing
 
 
 home = os.path.expanduser('~')
@@ -17,19 +13,30 @@ home = os.path.expanduser('~')
 sted_data_prefix = '/path/to/sted-data'
 
 # Number of samples per group
-groups = {'climp':9, 'control':14, 'rtn':12}
+groups = {'climp': 9, 'control': 14, 'rtn': 12}
 
 in_channels = 1
 out_channels = 1
 
-model = D4nERdy(in_channels, out_channels)
-process = PostProcessing()
+model = D4nERdy(in_channels, out_channels).cuda()
 model.load_state_dict(torch.load('path/to/your/model.pth'))
 
-def get_prob_map():
 
+def get_prob_map(group, frame):
+    """
+    Get the probability map for a given group and frame.
+
+    Args:
+        group (str): The group name.
+        frame (int): The frame number.
+
+    Returns:
+        prob_map (numpy.ndarray): The probability map.
+    """
+    
     # Adjust path to your image
-    imgpath = 'climp12_er_mean.png'
+    # Test with climp12_er_mean.png from the repository.
+    imgpath = f'{group}{frame}_er_mean.png'
 
     image = Image.open(imgpath)
     transform = transforms.Compose([
@@ -55,15 +62,30 @@ def get_prob_map():
 
     norm = (output_probs_np - output_probs_np.min()) / (output_probs_np.max() - output_probs_np.min())
 
-    prob_map = process.postprocessing(norm)
+    # prob_map = process.postprocessing(norm)
+    prob_map = postprocessing(norm)
 
     return prob_map
 
 # get the probability map per input in each group
 def prob_map_runner():
+    """
+    Generates probability maps for each input in each group.
+
+    Returns:
+        prob_map_data (dict): A dictionary containing the probability maps for each input in each group.
+    """
     prob_map_data = {}
+
+    # Iterate over each group
     for group in groups:
+        # Iterate over each frame in the group
         for frame in range(1, groups[group]+1):
+            # Get the probability map for the current group and frame
             prob_map = get_prob_map(group, frame)
+
+            # Store the probability map in the dictionary
             prob_map_data[f'{group}{frame}'] = prob_map
+
     return prob_map_data
+

@@ -2,24 +2,30 @@ from skimage import restoration
 from skimage.filters import threshold_otsu
 import copy
 
-class PostProcessing:
+def postprocessing(img):
+    """
+    Perform post-processing on the input image.
 
-    def __init__(self):
-        pass
+    Parameters:
+    img (numpy.ndarray): Input image.
 
-    def postprocessing(self, img):
-        # get background
-        img_bg = restoration.rolling_ball(img)
+    Returns:
+    numpy.ndarray: Processed image.
+    """
+    # Apply rolling ball algorithm to get background
+    img_bg = restoration.rolling_ball(img)
 
-        # get foreground
-        img_fg = self - img_bg
+    # Subtract background from input image to get foreground
+    img_fg = img - img_bg
 
-        # threshold foreground    
-        thresh_val = threshold_otsu(img_fg)
+    # Threshold the foreground image
+    thresh_val = threshold_otsu(img_fg)
 
-        op = copy.deepcopy(img_fg)
+    # Create a copy of the foreground image
+    op = copy.deepcopy(img_fg)
 
-        op[img_fg < thresh_val] = 0.
-        op[img_fg >= thresh_val] = 255.
+    # Set pixels below the threshold to 0 and above the threshold to 255
+    op[img_fg < thresh_val] = 0.
+    op[img_fg >= thresh_val] = 255.
 
-        return op
+    return op
