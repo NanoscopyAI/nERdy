@@ -7,6 +7,8 @@ from PIL import Image
 from model import D4nERdy
 from postprocessing import postprocessing
 
+import matplotlib.pyplot as plt
+
 
 home = os.path.expanduser('~')
 
@@ -89,3 +91,13 @@ def prob_map_runner():
 
     return prob_map_data
 
+# Visualize the probability map for climp12
+def visualize_prob_map():
+    """
+    Visualize the probability map for climp12.
+    """
+    prob_map = get_prob_map('climp', 12)
+    plt.imshow(prob_map, cmap='gray')
+    plt.show()
+
+# visualize_prob_map()
