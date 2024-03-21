@@ -21,6 +21,7 @@ class GraphMetricsPlotter:
 
     def __init__(self, modality):
         self.features = ['num_nodes', 'num_edges', 'assortativity', 'clustering', 'num_components', 'ratio_nodes', 'ratio_edges', 'global_efficiency', 'density']
+        self.methods = ['analyzer', 'ernet', 'erv2', 'nerdy', 'p4m']
         self.modality = modality
 
     @staticmethod
@@ -59,7 +60,7 @@ class GraphMetricsPlotter:
         Returns:
         - numpy.ndarray: The loaded graph error data as a NumPy array.
         """
-        return np.array(pkl.load(open(f'{self.modality}_{method}_graph_err.pkl', 'rb')))
+        return np.array(pkl.load(open(f'../pickles/{self.modality}_{method}_graph_err.pkl', 'rb')))
 
     def get_graph_features(self, method):
         """
@@ -71,11 +72,45 @@ class GraphMetricsPlotter:
         Returns:
             dict: A dictionary containing the graph features, where the keys are the feature names and the values are the standardized data.
         """
-        method_data = {}
+        features_data = {}
         for feature in self.features:
-            data = self.load_pickle(self.modality, method)[self.features.index(feature)]
-            method_data[feature] = self.std_data(data)
-        return method_data
+            data = self.load_pickle(method)[self.features.index(feature)]
+            features_data[feature] = self.std_data(data)
+        return features_data
+
+    def get_methods_data(self):
+        """
+        Retrieves the graph features for each method in the object's methods list.
+
+        Returns:
+            dict: A dictionary where the keys are the method names and the values are the corresponding graph features.
+        """
+        data = {}
+        for method in self.methods:
+            data[method] = self.get_graph_features(method)
+        return data
+    
+    def prepare_data(self, data):
+            """
+            Prepare the data for plotting.
+
+            Args:
+                data (dict): A dictionary containing the data for different methods and features.
+
+            Returns:
+                pd.DataFrame: A pandas DataFrame containing the prepared data with columns 'Values', 'Metric', and 'Method'.
+            """
+            values = []
+            metrics = []
+            methods = []
+
+            for method, method_data in data.items():
+                for feature in self.features:
+                    values.extend(method_data[feature])
+                    metrics.extend([feature]*len(method_data[feature]))
+                    methods.extend([method]*len(method_data[feature]))
+
+            return pd.DataFrame({'Values': values, 'Metric': metrics, 'Method': methods})
 
     def plot(self):
         """
@@ -84,36 +119,8 @@ class GraphMetricsPlotter:
         Returns:
             None
         """
-        analyzer_data = self.get_graph_features(self.modality, 'analyzer')
-        ernet_data = self.get_graph_features(self.modality, 'ernet')
-        ernet_v2_data = self.get_graph_features(self.modality, 'erv2')
-        nerdy_data = self.get_graph_features(self.modality, 'nerdy')
-        nerdy_p4m_data = self.get_graph_features(self.modality, 'p4m')
-
-        df = pd.DataFrame()
-
-        val_data = []
-        metric_names = []
-        method_names = []
-
-        for feature in self.features:
-            val_data.extend(analyzer_data[feature] + ernet_data[feature] + ernet_v2_data[feature] + nerdy_data[feature] + nerdy_p4m_data[feature])
-        
-            metric_names.append([feature]*len(analyzer_data[feature]))
-            metric_names.append([feature]*len(ernet_data[feature]))
-            metric_names.append([feature]*len(ernet_v2_data[feature]))
-            metric_names.append([feature]*len(nerdy_data[feature]))
-            metric_names.append([feature]*len(nerdy_p4m_data[feature]))
-        
-            method_names.append(['AnalyzER']*len(analyzer_data[feature]))
-            method_names.append(['ERnet']*len(ernet_data[feature]))
-            method_names.append(['ERnet-v2']*len(ernet_v2_data[feature]))
-            method_names.append(['nERdy']*len(nerdy_data[feature]))
-            method_names.append(['nERdy+']*len(nerdy_p4m_data[feature]))
-        
-        df['Values'] = val_data
-        df['Metric'] = self.get_series(metric_names)
-        df['Method'] = self.get_series(method_names)
+        data = self.get_methods_data()
+        df = self.prepare_data(data)
         
         ax = sns.boxplot(x="Metric", y="Values", hue="Method", data=df, showfliers=False, whis=0.6, width=0.7, palette="Set2")
         
@@ -131,3 +138,8 @@ class GraphMetricsPlotter:
         plt.gcf().set_size_inches(6, 3) # new size
 
         plt.show()
+
+
+# Example usage
+# gmp = GraphMetricsPlotter('confocal')
+# gmp.plot()
