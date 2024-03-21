@@ -60,7 +60,7 @@ class GraphMetricsPlotter:
         Returns:
         - numpy.ndarray: The loaded graph error data as a NumPy array.
         """
-        return np.array(pkl.load(open(f'../pickles/{self.modality}_{method}_graph_err.pkl', 'rb')))
+        return np.array(pkl.load(open(f'pickle_files/graph_measures/{self.modality}_{method}_graph_err.pkl', 'rb')))
 
     def get_graph_features(self, method):
         """
