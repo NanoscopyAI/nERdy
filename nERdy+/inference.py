@@ -24,7 +24,7 @@ model = D4nERdy(in_channels, out_channels).cuda()
 model.load_state_dict(torch.load('path/to/your/model.pth'))
 
 # Uncomment the following line in case using the model from this repository
-# model.load_state_dict(torch.load('nERdy+/NNet_groupy_p4m_v2_VecAdam.pth'))
+# model.load_state_dict(torch.load('NNet_groupy_p4m_v2_VecAdam.pth'))
 
 
 def get_prob_map(group, frame):

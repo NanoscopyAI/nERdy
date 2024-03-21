@@ -91,26 +91,26 @@ class GraphMetricsPlotter:
         return data
     
     def prepare_data(self, data):
-            """
-            Prepare the data for plotting.
+        """
+        Prepare the data for plotting.
 
-            Args:
-                data (dict): A dictionary containing the data for different methods and features.
+        Args:
+            data (dict): A dictionary containing the data for different methods and features.
 
-            Returns:
-                pd.DataFrame: A pandas DataFrame containing the prepared data with columns 'Values', 'Metric', and 'Method'.
-            """
-            values = []
-            metrics = []
-            methods = []
+        Returns:
+            pd.DataFrame: A pandas DataFrame containing the prepared data with columns 'Values', 'Metric', and 'Method'.
+        """
+        values = []
+        metrics = []
+        methods = []
 
-            for method, method_data in data.items():
-                for feature in self.features:
-                    values.extend(method_data[feature])
-                    metrics.extend([feature]*len(method_data[feature]))
-                    methods.extend([method]*len(method_data[feature]))
+        for method, method_data in data.items():
+            for feature in self.features:
+                values.extend(method_data[feature])
+                metrics.extend([feature]*len(method_data[feature]))
+                methods.extend([method]*len(method_data[feature]))
 
-            return pd.DataFrame({'Values': values, 'Metric': metrics, 'Method': methods})
+        return pd.DataFrame({'Values': values, 'Metric': metrics, 'Method': methods})
 
     def plot(self):
         """
