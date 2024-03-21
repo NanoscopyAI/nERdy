@@ -139,6 +139,9 @@ class GraphMetricsPlotter:
 
         plt.show()
 
+        # uncomment to save the figure
+        # plt.savefig(f'{self.modality}_graph_metrics.png', dpi=300, bbox_inches='tight', pad_inches=0.1)
+
 
 # Example usage
 # gmp = GraphMetricsPlotter('confocal')
