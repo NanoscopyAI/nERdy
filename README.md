@@ -14,3 +14,16 @@ nERdy: Image processing method
 nERdy+: D4-equivariant segmentation method
 
 analysis: scripts for junction analysis pipeline and to generate all the results in the paper
+
+## Cite
+If you find this article useful, please cite
+```
+@article{samudre2024nerdy,
+  title={nERdy: network analysis of endoplasmic reticulum dynamics},
+  author={Samudre, Ashwin and Gao, Guang and Cardoen, Ben and Nabi, Ivan Robert and Hamarneh, Ghassan},
+  journal={bioRxiv},
+  pages={2024--02},
+  year={2024},
+  publisher={Cold Spring Harbor Laboratory}
+}
+```
