@@ -14,7 +14,7 @@ The endoplasmic reticulum (ER) comprises smooth tubules, ribosome-studded sheets
 In the figure above, `A` shows the nERdy method, and `B` shows the nERdy+ method.
 
 ## Data
-The tiff files for the confocal modality can be downloaded from [here](https://figshare.com/articles/dataset/nERdy_dataset/25241458).
+The tiff files for the data presented in this work can be downloaded from [here](https://figshare.com/articles/dataset/nERdy_dataset/25241458).
 
 ## nERdy: Image processing method
 nERdy provides a set of morphological image processing operations for the segmentation of tubular structures from the input ER samples.
