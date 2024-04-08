@@ -9,6 +9,10 @@ Pre-print: [https://www.biorxiv.org/content/10.1101/2022.05.17.492189v1](https:/
 ## Abstract
 The endoplasmic reticulum (ER) comprises smooth tubules, ribosome-studded sheets, and peripheral sheets that can present as tubular matrices. ER shaping proteins determine ER morphology, however, their role in tubular matrix formation requires reconstructing the dynamic, convoluted ER network. Existing reconstruction methods are sensitive to parameters or require extensive annotation and training for deep learning. We introduce nERdy, an image processing based approach, and nERdy+, a D4-equivariant neural network, for accurate extraction and representation of ER networks and junction dynamics, outperforming previous methods. Comparison of stable and dynamic representations of the extracted ER structure reports on tripartite junction movement and distinguishes tubular matrices from peripheral ER networks. Analysis of live cell confocal and STED time series data shows that Atlastin and Reticulon 4 promote dynamic tubular matrix formation and enhance junction dynamics, identifying novel roles for these ER-shaping proteins in regulating ER structure and dynamics.
 
+<img src="figures/nERdy_combined.png" width="1024">
+
+In the figure above, `A` denotes the nERdy method and `B` shows the nERdy+ method.
+
 ## Data
 The tiff files for the confocal modality can be downloaded from [here](https://figshare.com/articles/dataset/nERdy_dataset/25241458).
 
@@ -27,7 +31,9 @@ Data: In your data directory store the `images` and `masks` in individual subdir
 Trainer: provide the data path and set other hyperparameters in the config.ini file
 
 ## Analysis framework: scripts for junction analysis pipeline and to generate all the results in the paper
-`junction_analysis` script provides the routines for dynamics analysis presented in the paper.
+`junction_analysis` script provides the routines for dynamics analysis presented in the paper. Our dynamic analysis framework is method-agnostic and can be plugged with other methods for segmentation apart from nERdy+.
+
+<img src="figures/nerdynet-pipeline.drawio.png" width="1024">
 
 ## Cite
 If you find this article useful, please cite
