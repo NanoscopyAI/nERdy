@@ -11,7 +11,7 @@ The endoplasmic reticulum (ER) comprises smooth tubules, ribosome-studded sheets
 
 <img src="figures/nERdy_combined.png" width="1024">
 
-In the figure above, `A` denotes the nERdy method and `B` shows the nERdy+ method.
+In the figure above, `A` shows the nERdy method, and `B` shows the nERdy+ method.
 
 ## Data
 The tiff files for the confocal modality can be downloaded from [here](https://figshare.com/articles/dataset/nERdy_dataset/25241458).
@@ -28,7 +28,9 @@ nERdy+ is a D4-equivariant encoder-decoder network trained to segment the tubula
 ## Training nERdy+ on custom dataset
 Data: In your data directory store the `images` and `masks` in individual subdirectories. Masks are expected to have the same name as the corresponding input image followed by a `_mask` suffix.
 
-Trainer: provide the data path and set other hyperparameters in the config.ini file
+Trainer: provide the data path and set other hyperparameters in the config.ini file and run `train.py`
+
+Inference: provide the saved model path in `inference.py` to obtain the output segmentation map.
 
 ## Analysis framework: scripts for junction analysis pipeline and to generate all the results in the paper
 `junction_analysis` script provides the routines for dynamics analysis presented in the paper. Our dynamic analysis framework is method-agnostic and can be plugged with other methods for segmentation apart from nERdy+.
