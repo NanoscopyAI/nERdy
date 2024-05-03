@@ -13,6 +13,25 @@ The endoplasmic reticulum (ER) comprises smooth tubules, ribosome-studded sheets
 
 In the figure above, `A` shows the nERdy method, and `B` shows the nERdy+ method.
 
+## Installation
+### Cloning the repository
+This assumes you have [Git](https://git-scm.com/downloads) installed and configured.
+```bash
+git clone https://github.com/NanoscopyAI/nERdy.git
+```
+### Conda environment
+Follow the instructions [here](https://docs.anaconda.com/free/miniconda/#quick-command-line-install) to install miniconda.
+Once you have the `base` (default) environment setup with conda, create new conda environment with
+```
+conda create -n nerdy-env
+conda activate nerdy-env
+```
+### Install requirements
+```
+cd nERdy
+pip install -r requirements.txt
+```
+
 ## Data
 The tiff files for the data presented in this work can be downloaded from [here](https://figshare.com/articles/dataset/nERdy_dataset/25241458).
 
