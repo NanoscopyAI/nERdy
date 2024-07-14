@@ -32,6 +32,9 @@ cd nERdy
 pip install -r requirements.txt
 ```
 
+## Container
+TO ADD.
+
 ## Data
 The tiff files for the data presented in this work can be downloaded from [here](https://figshare.com/articles/dataset/nERdy_dataset/25241458).
 
