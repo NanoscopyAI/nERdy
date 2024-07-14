@@ -35,7 +35,7 @@ class SegmentationMetricsPlotter:
         """
         assert modality in self.modality, 'Invalid modality'
         assert metric in self.metrics, 'Invalid metric'
-        return pkl.load(open(f'pickle_files/segmentation_measures/{modality}_{metric}.pkl', 'rb'))
+        return pkl.load(open(f'analysis/pickle_files/segmentation_measures/{modality}_{metric}.pkl', 'rb'))
 
     @staticmethod
     def get_series(data):

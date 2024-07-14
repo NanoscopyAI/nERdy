@@ -21,7 +21,7 @@ class GraphMetricsPlotter:
 
     def __init__(self, modality):
         self.features = ['num_nodes', 'num_edges', 'assortativity', 'clustering', 'num_components', 'ratio_nodes', 'ratio_edges', 'global_efficiency', 'density']
-        self.methods = ['analyzer', 'ernet', 'erv2', 'nerdy', 'p4m']
+        self.methods = ['AnalyzER', 'ERnet', 'ERnetV2', 'nERdy', 'nERdy+']
         self.modality = modality
 
     @staticmethod
@@ -30,11 +30,12 @@ class GraphMetricsPlotter:
         Standardizes the given data for the same scale.
 
         Parameters:
-        data (list): The input data to be standardized.
+        data (ndarray): The input data to be standardized.
 
         Returns:
         list: The standardized data.
         """
+
         return list((data - min(data)) / (max(data) - min(data)))
     
     @staticmethod
@@ -60,7 +61,7 @@ class GraphMetricsPlotter:
         Returns:
         - numpy.ndarray: The loaded graph error data as a NumPy array.
         """
-        return np.array(pkl.load(open(f'pickle_files/graph_measures/{self.modality}_{method}_graph_err.pkl', 'rb')))
+        return np.array(pkl.load(open(f'analysis/pickle_files/graph_measures/{self.modality}_{method}_graph_err.pkl', 'rb')))
 
     def get_graph_features(self, method):
         """
@@ -75,6 +76,7 @@ class GraphMetricsPlotter:
         features_data = {}
         for feature in self.features:
             data = self.load_pickle(method)[self.features.index(feature)]
+            print(feature)
             features_data[feature] = self.std_data(data)
         return features_data
 
