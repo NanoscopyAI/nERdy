@@ -3,6 +3,9 @@ from unittest.mock import patch, mock_open
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from analysis.graph_metrics_plotter import GraphMetricsPlotter
 
 class TestGraphMetricsPlotter(unittest.TestCase):
