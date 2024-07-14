@@ -1,13 +1,13 @@
-numpy==1.20.3
-pandas==1.3.5
+numpy==1.23.1
+pandas==2.2.1
 seaborn==0.11.2
-matplotlib==3.5.1
-scikit-image==0.18.1
-sknw==0.13
-imageio==2.16.1
-plantcv==3.13.4
-pillow==9.0.0
-pytorch==1.13.1
-torchvision==0.11.3
+matplotlib==3.8.2
+scikit-image==0.22.0
+sknw==0.15
+imageio==2.33.1
+plantcv==4.2.1
+pillow==10.2.0
+torch==2.2.1
+torchvision==0.17.1
 
 
