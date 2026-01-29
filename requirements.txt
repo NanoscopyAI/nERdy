@@ -1,13 +1,31 @@
-numpy==1.23.1
-pandas==2.2.1
-seaborn==0.11.2
-matplotlib==3.8.2
-scikit-image==0.22.0
-sknw==0.15
-imageio==2.33.1
-plantcv==4.2.1
-pillow==10.2.0
-torch==2.2.1
-torchvision==0.17.1
+# Core dependencies
+numpy>=1.23.1
+pandas>=2.0.0
+scipy>=1.10.0
+
+# Visualization
+seaborn>=0.11.2
+matplotlib>=3.8.0
+
+# Image processing
+scikit-image>=0.22.0
+imageio>=2.33.1
+pillow>=10.2.0
+opencv-python>=4.8.0
+
+# Graph and network analysis
+sknw>=0.15
+networkx>=3.0
+
+# Plant analysis (for skeletonization)
+plantcv>=4.2.1
+
+# Deep Learning
+torch>=2.0.0
+torchvision>=0.15.0
+
+# Utilities
+tqdm>=4.65.0
+configparser>=5.0.0
 
 

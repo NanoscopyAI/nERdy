@@ -1,0 +1,117 @@
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nERdy"
+version = "1.0.0"
+description = "Network analysis of endoplasmic reticulum dynamics with image processing and deep learning methods"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Ashwin Samudre", email = "asamudre@sfu.ca"},
+    {name = "Guang Gao"},
+    {name = "Ben Cardoen"},
+    {name = "Ivan Robert Nabi"},
+    {name = "Ghassan Hamarneh"}
+]
+maintainers = [
+    {name = "Ashwin Samudre", email = "asamudre@sfu.ca"}
+]
+keywords = [
+    "endoplasmic-reticulum",
+    "deep-learning",
+    "image-segmentation",
+    "microscopy",
+    "network-analysis",
+    "equivariant-neural-networks"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Image Processing",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "numpy>=1.23.1",
+    "pandas>=2.0.0",
+    "scipy>=1.10.0",
+    "seaborn>=0.11.2",
+    "matplotlib>=3.8.0",
+    "scikit-image>=0.22.0",
+    "imageio>=2.33.1",
+    "pillow>=10.2.0",
+    "opencv-python>=4.8.0",
+    "sknw>=0.15",
+    "networkx>=3.0",
+    "plantcv>=4.2.1",
+    "torch>=2.0.0",
+    "torchvision>=0.15.0",
+    "tqdm>=4.65.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "isort>=5.12.0",
+]
+matlab = [
+    "matlabengine>=9.14",  # For nERdy image processing method
+]
+
+[project.urls]
+Homepage = "https://github.com/NanoscopyAI/nERdy"
+Documentation = "https://github.com/NanoscopyAI/nERdy#readme"
+Repository = "https://github.com/NanoscopyAI/nERdy"
+Issues = "https://github.com/NanoscopyAI/nERdy/issues"
+Paper = "https://www.biorxiv.org/content/10.1101/2024.02.20.581259v1.abstract"
+
+[project.scripts]
+nerdy-train = "nERdyplus.train:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["nERdy*", "nERdyplus*", "analysis*", "groupy*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.pth", "*.ini"]
+
+[tool.pytest.ini_options]
+testpaths = ["test"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+
+[tool.black]
+line-length = 100
+target-version = ['py38', 'py39', 'py310', 'py311']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 100
