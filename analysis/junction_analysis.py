@@ -5,7 +5,7 @@ import imageio
 import numpy as np
 from skimage.measure import regionprops
 
-from junction_analysis_modules import JunctionAnalysisModules as JAM
+from .junction_analysis_modules import JunctionAnalysisModules as JAM
 
 
 logging.basicConfig(level=logging.INFO)
