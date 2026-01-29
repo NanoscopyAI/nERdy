@@ -1,8 +1,8 @@
-# nERdy
+# [nERdy: network analysis of endoplasmic reticulum dynamics](https://www.nature.com/articles/s42003-025-08892-1), Nature Communications Biology
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-red.svg)](https://pytorch.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
 **nERdy** is a toolkit for segmenting and analyzing endoplasmic reticulum (ER) networks from microscopy images. It includes:
 - **nERdy**: An image processing method (Python-only or MATLAB version available)
@@ -12,7 +12,7 @@
 
 Ashwin Samudre, Guang Gao, Ben Cardoen, Bharat Joshi, Ivan Robert Nabi, Ghassan Hamarneh
 
-**Publication:** [https://www.nature.com/articles/s42003-025-08892-1](https://www.nature.com/articles/s42003-025-08892-1) (Nature Communications Biology)
+# **Publication:** [https://www.nature.com/articles/s42003-025-08892-1](https://www.nature.com/articles/s42003-025-08892-1) (Nature Communications Biology)
 
 <img src="figures/nERdy_combined.png" width="800">
 
