@@ -1,7 +1,5 @@
 # nERdy: network analysis of endoplasmic reticulum dynamics
 
----
-
 Ashwin Samudre, Guang Gao, Ben Cardoen, Bharat Joshi, Ivan Robert Nabi, Ghassan Hamarneh
 
 Publication: [https://www.nature.com/articles/s42003-025-08892-1](https://www.nature.com/articles/s42003-025-08892-1) (Nature Communications Biology)
