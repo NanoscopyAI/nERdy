@@ -35,7 +35,7 @@ class P4Array(MatrixGArray):
 
     def __init__(self, data, p='int'):
         data = np.asarray(data)
-        assert data.dtype == np.int
+        assert np.issubdtype(data.dtype, np.integer)
         self._left_actions[P4Array] = self.__class__.left_action_hmat
         self._left_actions[Z2Array] = self.__class__.left_action_hvec
         super(P4Array, self).__init__(data, p)
@@ -44,7 +44,7 @@ class P4Array(MatrixGArray):
         r = int_data[..., 0]
         u = int_data[..., 1]
         v = int_data[..., 2]
-        out = np.zeros(int_data.shape[:-1] + (3, 3), dtype=np.int)
+        out = np.zeros(int_data.shape[:-1] + (3, 3), dtype=np.int64)
         out[..., 0, 0] = np.cos(0.5 * np.pi * r)
         out[..., 0, 1] = -np.sin(0.5 * np.pi * r)
         out[..., 0, 2] = u
@@ -59,9 +59,9 @@ class P4Array(MatrixGArray):
         c = mat_data[..., 1, 1]
         u = mat_data[..., 0, 2]
         v = mat_data[..., 1, 2]
-        r = ((np.arctan2(s, c) / np.pi * 2) % 4).astype(np.int)
+        r = ((np.arctan2(s, c) / np.pi * 2) % 4).astype(np.int64)
 
-        out = np.zeros(mat_data.shape[:-2] + (3,), dtype=np.int)
+        out = np.zeros(mat_data.shape[:-2] + (3,), dtype=np.int64)
         out[..., 0] = r
         out[..., 1] = u
         out[..., 2] = v
@@ -75,7 +75,7 @@ v = P4Array(data=np.array([0, 0, 1]), p='int')
 
 
 def identity(shape=(), p='int'):
-    e = P4Array(np.zeros(shape + (3,), dtype=np.int), 'int')
+    e = P4Array(np.zeros(shape + (3,), dtype=np.int64), 'int')
     return e.reparameterize(p)
 
 
@@ -91,11 +91,11 @@ def rotation(r, center=(0, 0)):
     r = np.asarray(r)
     center = np.asarray(center)
 
-    rdata = np.zeros(r.shape + (3,), dtype=np.int)
+    rdata = np.zeros(r.shape + (3,), dtype=np.int64)
     rdata[..., 0] = r
     r0 = P4Array(rdata)
 
-    tdata = np.zeros(center.shape[:-1] + (3,), dtype=np.int)
+    tdata = np.zeros(center.shape[:-1] + (3,), dtype=np.int64)
     tdata[..., 1:] = center
     t = P4Array(tdata)
 
@@ -104,7 +104,7 @@ def rotation(r, center=(0, 0)):
 
 def translation(t):
     t = np.asarray(t)
-    tdata = np.zeros(t.shape[:-1] + (3,), dtype=np.int)
+    tdata = np.zeros(t.shape[:-1] + (3,), dtype=np.int64)
     tdata[..., 1:] = t
     return P4Array(tdata)
 
@@ -115,19 +115,19 @@ def r_range(start=0, stop=4, step=1):
     assert start >= 0
     assert start < 4
     assert start < stop
-    m = np.zeros((stop - start, 3), dtype=np.int)
+    m = np.zeros((stop - start, 3), dtype=np.int64)
     m[:, 0] = np.arange(start, stop, step)
     return P4Array(m)
 
 
 def u_range(start=-1, stop=2, step=1):
-    m = np.zeros((stop - start, 3), dtype=np.int)
+    m = np.zeros((stop - start, 3), dtype=np.int64)
     m[:, 1] = np.arange(start, stop, step)
     return P4Array(m)
 
 
 def v_range(start=-1, stop=2, step=1):
-    m = np.zeros((stop - start, 3), dtype=np.int)
+    m = np.zeros((stop - start, 3), dtype=np.int64)
     m[:, 2] = np.arange(start, stop, step)
     return P4Array(m)
 
