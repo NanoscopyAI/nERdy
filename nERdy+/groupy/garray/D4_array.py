@@ -17,7 +17,7 @@ class D4Array(MatrixGArray):
 
     def __init__(self, data, p='int'):
         data = np.asarray(data)
-        assert data.dtype == np.int
+        assert np.issubdtype(data.dtype, np.integer)
 
         self._left_actions[D4Array] = self.__class__.left_action_mat
         self._left_actions[P4MArray] = self.__class__.left_action_hmat
@@ -28,7 +28,7 @@ class D4Array(MatrixGArray):
     def int2mat(self, int_data):
         m = int_data[..., 0]
         r = int_data[..., 1]
-        out = np.zeros(int_data.shape[:-1] + self._g_shapes['mat'], dtype=np.int)
+        out = np.zeros(int_data.shape[:-1] + self._g_shapes['mat'], dtype=np.int64)
         out[..., 0, 0] = np.cos(0.5 * np.pi * r) * (-1) ** m
         out[..., 0, 1] = -np.sin(0.5 * np.pi * r) * (-1) ** m
         out[..., 1, 0] = np.sin(0.5 * np.pi * r)
@@ -40,9 +40,9 @@ class D4Array(MatrixGArray):
         s = mat_data[..., 1, 0]
         c = mat_data[..., 1, 1]
         m = (neg_det_r + 1) // 2
-        r = ((np.arctan2(s, c) / np.pi * 2) % 4).astype(np.int)
+        r = ((np.arctan2(s, c) / np.pi * 2) % 4).astype(np.int64)
 
-        out = np.zeros(mat_data.shape[:-2] + self._g_shapes['int'], dtype=np.int)
+        out = np.zeros(mat_data.shape[:-2] + self._g_shapes['int'], dtype=np.int64)
         out[..., 0] = m
         out[..., 1] = r
         return out
@@ -71,7 +71,7 @@ e = D4Array(data=np.array([0, 0]), p='int')
 
 
 def identity(shape=(), p='int'):
-    e = D4Array(np.zeros(shape + (2,), dtype=np.int), 'int')
+    e = D4Array(np.zeros(shape + (2,), dtype=np.int64), 'int')
     return e.reparameterize(p)
 
 

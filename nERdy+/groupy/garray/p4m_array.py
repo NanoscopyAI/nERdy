@@ -39,7 +39,7 @@ class P4MArray(MatrixGArray):
 
     def __init__(self, data, p='int'):
         data = np.asarray(data)
-        assert data.dtype == np.int
+        assert np.issubdtype(data.dtype, np.integer)
         assert (p == 'int' and data.shape[-1] == 4) or (p == 'hmat' and data.shape[-2:] == (3, 3))
 
         self._left_actions[P4MArray] = self.__class__.left_action_hmat
@@ -52,7 +52,7 @@ class P4MArray(MatrixGArray):
         r = int_data[..., 1]
         u = int_data[..., 2]
         v = int_data[..., 3]
-        out = np.zeros(int_data.shape[:-1] + (3, 3), dtype=np.int)
+        out = np.zeros(int_data.shape[:-1] + (3, 3), dtype=np.int64)
         out[..., 0, 0] = np.cos(0.5 * np.pi * r) * (-1) ** m
         out[..., 0, 1] = -np.sin(0.5 * np.pi * r) * (-1) ** m
         out[..., 0, 2] = u
@@ -69,9 +69,9 @@ class P4MArray(MatrixGArray):
         u = hmat_data[..., 0, 2]
         v = hmat_data[..., 1, 2]
         m = (neg_det_r + 1) // 2
-        r = ((np.arctan2(s, c) / np.pi * 2) % 4).astype(np.int)
+        r = ((np.arctan2(s, c) / np.pi * 2) % 4).astype(np.int64)
 
-        out = np.zeros(hmat_data.shape[:-2] + (4,), dtype=np.int)
+        out = np.zeros(hmat_data.shape[:-2] + (4,), dtype=np.int64)
         out[..., 0] = m
         out[..., 1] = r
         out[..., 2] = u
@@ -80,7 +80,7 @@ class P4MArray(MatrixGArray):
 
 
 def identity(shape=(), p='int'):
-    e = P4MArray(np.zeros(shape + (4,), dtype=np.int), 'int')
+    e = P4MArray(np.zeros(shape + (4,), dtype=np.int64), 'int')
     return e.reparameterize(p)
 
 
@@ -97,11 +97,11 @@ def rotation(r, center=(0, 0)):
     r = np.asarray(r)
     center = np.asarray(center)
 
-    rdata = np.zeros(r.shape + (4,), dtype=np.int)
+    rdata = np.zeros(r.shape + (4,), dtype=np.int64)
     rdata[..., 1] = r
     r0 = P4MArray(rdata)
 
-    tdata = np.zeros(center.shape[:-1] + (4,), dtype=np.int)
+    tdata = np.zeros(center.shape[:-1] + (4,), dtype=np.int64)
     tdata[..., 2:] = center
     t = P4MArray(tdata)
 
@@ -110,7 +110,7 @@ def rotation(r, center=(0, 0)):
 
 def mirror_u(shape=None):
     shape = shape if shape is not None else ()
-    mdata = np.zeros(shape + (4,), dtype=np.int)
+    mdata = np.zeros(shape + (4,), dtype=np.int64)
     mdata[0] = 1
     return P4MArray(mdata)
 
@@ -127,7 +127,7 @@ def m_range(start=0, stop=2):
     assert start >= 0
     assert start < 2
     assert start < stop
-    m = np.zeros((stop - start, 4), dtype=np.int)
+    m = np.zeros((stop - start, 4), dtype=np.int64)
     m[:, 0] = np.arange(start, stop)
     return P4MArray(m)
 
@@ -138,19 +138,19 @@ def r_range(start=0, stop=4, step=1):
     assert start >= 0
     assert start < 4
     assert start < stop
-    m = np.zeros((stop - start, 4), dtype=np.int)
+    m = np.zeros((stop - start, 4), dtype=np.int64)
     m[:, 1] = np.arange(start, stop, step)
     return P4MArray(m)
 
 
 def u_range(start=-1, stop=2, step=1):
-    m = np.zeros((stop - start, 4), dtype=np.int)
+    m = np.zeros((stop - start, 4), dtype=np.int64)
     m[:, 2] = np.arange(start, stop, step)
     return P4MArray(m)
 
 
 def v_range(start=-1, stop=2, step=1):
-    m = np.zeros((stop - start, 4), dtype=np.int)
+    m = np.zeros((stop - start, 4), dtype=np.int64)
     m[:, 3] = np.arange(start, stop, step)
     return P4MArray(m)
 
